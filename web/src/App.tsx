@@ -1,7 +1,9 @@
 import {
+  Alert,
   Button,
   LinearProgress,
   Paper,
+  Snackbar,
   Stack,
   Typography,
 } from '@mui/material';
@@ -15,6 +17,11 @@ import Box from '@mui/material/Box';
 export function App() {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -24,6 +31,7 @@ export function App() {
         setRepos(data);
       })
       .catch(() => {
+        setOpen(true);
         console.log('Error while fetching repositories');
       })
       .finally(() => setIsLoading(false));
@@ -82,6 +90,17 @@ export function App() {
           {langElems}
         </Stack>
       </Box>
+
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={open}
+        autoHideDuration={2000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="error">
+          Error while fetching repos
+        </Alert>
+      </Snackbar>
     </>
   );
 }
