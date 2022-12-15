@@ -1,4 +1,10 @@
-import { Button, Paper, Stack, Typography } from '@mui/material';
+import {
+  Button,
+  LinearProgress,
+  Paper,
+  Stack,
+  Typography,
+} from '@mui/material';
 import React, { useState, useEffect, useMemo } from 'react';
 import RepoTable from './components/RepoTable';
 
@@ -8,8 +14,10 @@ import Box from '@mui/material/Box';
 
 export function App() {
   const [repos, setRepos] = useState<Repo[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     fetch('/repos')
       .then((res) => res.json())
       .then((data) => {
@@ -17,7 +25,8 @@ export function App() {
       })
       .catch(() => {
         console.log('Error while fetching repositories');
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   const languages = useMemo(
@@ -52,22 +61,27 @@ export function App() {
   );
 
   return (
-    <Box
-      component={Paper}
-      sx={{
-        width: '60%',
-        margin: 'auto',
-        marginY: '40px',
-        padding: '16px',
-      }}
-    >
-      <Typography align="center" variant="h4">
-        SilverOrange - Exercise
-      </Typography>
-      <RepoTable repos={filteredRepos} />
-      <Stack direction="row" spacing={2} justifyContent="flex-end">
-        {langElems}
-      </Stack>
-    </Box>
+    <>
+      {isLoading && (
+        <Box component={LinearProgress} sx={{ display: 'fixed', top: '0px' }} />
+      )}
+      <Box
+        component={Paper}
+        sx={{
+          width: '60%',
+          margin: 'auto',
+          marginY: '40px',
+          padding: '16px',
+        }}
+      >
+        <Typography align="center" variant="h4">
+          SilverOrange - Exercise
+        </Typography>
+        <RepoTable repos={filteredRepos} />
+        <Stack direction="row" spacing={2} justifyContent="flex-end">
+          {langElems}
+        </Stack>
+      </Box>
+    </>
   );
 }
