@@ -11,6 +11,7 @@ function RepoTable({ repos }: { repos: Repo[] }) {
       { field: 'name', headerName: 'Name', flex: 1 },
       { field: 'description', headerName: 'Description', flex: 2 },
       { field: 'forksCount', headerName: 'Forks Count', flex: 1 },
+      { field: 'createdAt', headerName: 'Created At', hide: true },
     ],
     []
   );
@@ -33,6 +34,7 @@ function RepoTable({ repos }: { repos: Repo[] }) {
         columns={columns}
         rowHeight={50}
         autoHeight={true}
+        sortModel={[{ field: 'createdAt', sort: 'desc' }]}
       />
     </Box>
   );
