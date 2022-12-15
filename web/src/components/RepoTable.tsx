@@ -28,7 +28,7 @@ function RepoTable({ repos }: { repos: Repo[] }) {
   );
 
   return (
-    <Box my={4} height={400}>
+    <Box my={4}>
       <DataGrid
         rows={rows}
         columns={columns}
