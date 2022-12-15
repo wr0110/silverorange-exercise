@@ -32,9 +32,23 @@ export function App() {
     [repos]
   );
 
+  const [language, setLanguage] = useState('');
   const langElems = useMemo(
-    () => languages.map((lang, index) => <Button key={index}>{lang}</Button>),
+    () =>
+      languages.map((lang, index) => (
+        <Button onClick={() => setLanguage(lang)} key={index}>
+          {lang}
+        </Button>
+      )),
     [languages]
+  );
+
+  const filteredRepos = useMemo(
+    () =>
+      repos.filter(
+        ({ language: lang }) => language === '' || lang === language
+      ),
+    [repos, language]
   );
 
   return (
@@ -50,7 +64,7 @@ export function App() {
       <Typography align="center" variant="h4">
         SilverOrange - Exercise
       </Typography>
-      <RepoTable repos={repos} />
+      <RepoTable repos={filteredRepos} />
       <Stack direction="row" spacing={2} justifyContent="flex-end">
         {langElems}
       </Stack>
