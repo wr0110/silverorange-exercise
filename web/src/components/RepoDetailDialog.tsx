@@ -1,5 +1,7 @@
 import {
+  Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
   Stack,
@@ -19,7 +21,7 @@ function RepoDetailDialog({
 }: {
   repo: Repo;
   open: boolean;
-  onClose: (value: string) => void;
+  onClose: () => void;
 }) {
   return (
     <Dialog open={open} onClose={onClose}>
@@ -33,6 +35,17 @@ function RepoDetailDialog({
           </Typography>
         </Stack>
       </DialogContent>
+      <DialogActions>
+        <Stack direction="row" spacing={2}>
+          <Button
+            onClick={() => {
+              onClose();
+            }}
+          >
+            Return to the MAIN list
+          </Button>
+        </Stack>
+      </DialogActions>
     </Dialog>
   );
 }
