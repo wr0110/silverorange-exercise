@@ -1,11 +1,13 @@
+import { Paper, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
+import RepoTable from './components/RepoTable';
 
 import './App.css';
 import { Repo } from './models/Repo';
+import Box from '@mui/material/Box';
 
 export function App() {
   const [repos, setRepos] = useState<Repo[]>([]);
-  console.log('repos: ', repos);
 
   useEffect(() => {
     fetch('/repos')
@@ -19,5 +21,21 @@ export function App() {
       });
   }, []);
 
-  return <div>hi</div>;
+  return (
+    <Box
+      component={Paper}
+      sx={{
+        width: '60%',
+        margin: 'auto',
+        marginTop: '40px',
+        height: '400px',
+        padding: '16px',
+      }}
+    >
+      <Typography align="center" variant="h4">
+        SilverOrange - Exercise
+      </Typography>
+      <RepoTable repos={repos} />
+    </Box>
+  );
 }
