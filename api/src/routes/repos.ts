@@ -9,9 +9,9 @@ repos.get('/', json(), async (_: Request, res: Response) => {
     await import('../../data/repos.json')
   ).default;
 
-  const repositoriesfromAxios: Repo[] = await Axios(
-    'https://api.github.com/users/silverorange/repos'
-  );
+  const repositoriesfromAxios: Repo[] = await (
+    await Axios('https://api.github.com/users/silverorange/repos')
+  ).data;
 
   const filteredRepos = [
     ...repositoriesfromFile,

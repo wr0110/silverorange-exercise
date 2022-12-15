@@ -28,7 +28,11 @@ export function App() {
     fetch('/repos')
       .then((res) => res.json())
       .then((data) => {
-        setRepos(data);
+        if (data.length) {
+          setRepos(data);
+        } else {
+          setOpen(true);
+        }
       })
       .catch(() => {
         setOpen(true);

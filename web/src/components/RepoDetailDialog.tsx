@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -26,17 +27,17 @@ function RepoDetailDialog({
   open: boolean;
   onClose: () => void;
 }) {
-  const [markDownContent, setMarkDownContent] = useState(null);
+  const [markDownContent, setMarkDownContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
     fetch(`https://raw.githubusercontent.com/${fullName}/master/README.md`)
-      .then((res) => res.json())
+      .then((res) => (res.ok ? res.text() : ''))
       .then((content) => {
         setMarkDownContent(content);
       })
-      .catch(() => setMarkDownContent(null))
+      .catch(() => setMarkDownContent(''))
       .finally(() => setIsLoading(false));
   }, [fullName]);
 
@@ -44,23 +45,26 @@ function RepoDetailDialog({
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{name}</DialogTitle>
       <DialogContent>
-        <Stack justifyContent="center" spacing={2}>
+        <Stack justifyContent="center" spacing={2} my={2}>
           <Typography>Most Recent Commit Date: {updatedAt}</Typography>
           <Typography>Author: {login}</Typography>
           <Typography>
             Message: there's not approach to find commit hash value
           </Typography>
-          {isLoading ? (
-            <CircularProgress />
-          ) : markDownContent ? (
-            <>
-              <Typography align="center">MarkDown Content</Typography>
-              <ReactMarkdown>{markDownContent}</ReactMarkdown>
-            </>
-          ) : (
-            <Typography align="center">No README.md file</Typography>
-          )}
         </Stack>
+        {isLoading ? (
+          <CircularProgress />
+        ) : markDownContent ? (
+          <Box mt={4}>
+            <hr />
+            <Typography align="center" variant="h3">
+              MarkDown Content
+            </Typography>
+            <ReactMarkdown>{markDownContent}</ReactMarkdown>
+          </Box>
+        ) : (
+          <Typography align="center">No README.md file</Typography>
+        )}
       </DialogContent>
       <DialogActions>
         <Stack direction="row" spacing={2}>

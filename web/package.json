@@ -47,5 +47,5 @@
     "prettier": "prettier --list-different \"src/**/*.{scss,css,js,ts,jsx,tsx}\"",
     "prettier-write": "prettier --write \"src/**/*.{scss,css,js,ts,jsx,tsx}\""
   },
-  "proxy": "http://localhost:4000"
+  "proxy": "http://localhost:4000/"
 }
