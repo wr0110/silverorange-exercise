@@ -1,14 +1,22 @@
+import Axios from 'axios';
 import { Router, Request, Response, json } from 'express';
 import { Repo } from '../models/Repo';
 
 export const repos = Router();
 
 repos.get('/', json(), async (_: Request, res: Response) => {
-  const repositories: Repo[] = await (
+  const repositoriesfromFile: Repo[] = await (
     await import('../../data/repos.json')
   ).default;
 
-  const filteredRepos = repositories.filter(({ fork }) => fork === false);
+  const repositoriesfromAxios: Repo[] = await Axios(
+    'https://api.github.com/users/silverorange/repos'
+  );
+
+  const filteredRepos = [
+    ...repositoriesfromFile,
+    ...repositoriesfromAxios,
+  ].filter(({ fork }) => fork === false);
 
   res.header('Cache-Control', 'no-store');
 
