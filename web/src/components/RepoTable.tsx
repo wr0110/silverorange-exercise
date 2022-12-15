@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { GridColDef } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid/DataGrid';
-import { GridRowsProp } from '@mui/x-data-grid/models';
+import { GridEventListener, GridRowsProp } from '@mui/x-data-grid/models';
 import React, { useMemo } from 'react';
 import { Repo } from '../models/Repo';
 
@@ -27,6 +27,10 @@ function RepoTable({ repos }: { repos: Repo[] }) {
     [repos]
   );
 
+  const handleRowClick: GridEventListener<'rowClick'> = (params) => {
+    console.log('params', params);
+  };
+
   return (
     <Box my={4}>
       <DataGrid
@@ -35,6 +39,7 @@ function RepoTable({ repos }: { repos: Repo[] }) {
         rowHeight={50}
         autoHeight={true}
         sortModel={[{ field: 'createdAt', sort: 'desc' }]}
+        onRowClick={handleRowClick}
       />
     </Box>
   );
