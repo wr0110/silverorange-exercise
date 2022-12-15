@@ -2,8 +2,9 @@ import Box from '@mui/material/Box';
 import { GridColDef } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid/DataGrid';
 import { GridEventListener, GridRowsProp } from '@mui/x-data-grid/models';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Repo } from '../models/Repo';
+import RepoDetailDialog from './RepoDetailDialog';
 
 function RepoTable({ repos }: { repos: Repo[] }) {
   const columns: GridColDef[] = useMemo(
@@ -27,13 +28,26 @@ function RepoTable({ repos }: { repos: Repo[] }) {
     [repos]
   );
 
-  const handleRowClick: GridEventListener<'rowClick'> = (params) => {
-    console.log('params', params);
+  const [selectedRepo, setSelectedRepo] = useState<Repo>();
+  const [open, setOpen] = useState(false);
+
+  const handleRowClick: GridEventListener<'rowClick'> = ({ row }) => {
+    setOpen(true);
+    setSelectedRepo(repos.find(({ name }) => row.name === name));
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
     <Box my={4}>
       <DataGrid
+        sx={{
+          '& .MuiDataGrid-row': {
+            cursor: 'pointer',
+          },
+        }}
         rows={rows}
         columns={columns}
         rowHeight={50}
@@ -41,6 +55,14 @@ function RepoTable({ repos }: { repos: Repo[] }) {
         sortModel={[{ field: 'createdAt', sort: 'desc' }]}
         onRowClick={handleRowClick}
       />
+
+      {selectedRepo && (
+        <RepoDetailDialog
+          open={open}
+          onClose={handleClose}
+          repo={selectedRepo}
+        />
+      )}
     </Box>
   );
 }
